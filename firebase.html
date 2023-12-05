@@ -58,7 +58,17 @@
             const nombre=document.getElementById("nombre").value;
             const edad=document.getElementById("edad").value;
             console.log(nombre,edad);
-        }
+
+            push(
+                ref(database, 'septimo-2023'),
+                {
+                    name: nombre,
+                    age:edad
+                }
+            );
+            }
+        
+
     </script>
 </body>
 </html>
