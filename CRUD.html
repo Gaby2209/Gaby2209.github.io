@@ -24,10 +24,6 @@
     </header>
     <h1>Hola Mundo</h1>
     <form id="crud-form">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre">
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad">
         <label for="propiedad">Propiedad:</label>
         <input type="text" id="propiedad">
         <label for="ubicacion">Ubicación:</label>
@@ -67,12 +63,14 @@
             const nombre = document.getElementById("nombre").value;
             const edad = document.getElementById("edad").value;
             const propiedad = document.getElementById("propiedad").value;
+            const ubicacion = document.getElementById("ubicacion").value;
+            const precio = document.getElementById("precio").value;
+            const descripcion = document.getElementById("descripcion").value;
+            const tipo = document.getElementById("tipo").value;
             
             push(
                 ref(database, 'septimo'),
                 {
-                    name: nombre,
-                    age: edad,
                     priedad: propiedad,
                     ubicacion: ubicacion,
                     precio: precio,
@@ -82,8 +80,6 @@
             );
 
             // Limpiar los campos después de agregar
-            document.getElementById('nombre').value = '';
-            document.getElementById('edad').value = '';
             document.getElementById('propiedad').value = '';
             document.getElementById('ubicacion').value = '';
             document.getElementById('precio').value = '';
@@ -99,12 +95,12 @@
             snapshot.forEach((childSnapshot) => {
                 const registro = childSnapshot.val();
                 const li = document.createElement('li');
-                li.textContent = `${registro.name}, ${registro.age} años, ${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo}`;
+                li.textContent = `${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo}`;
 
                 // Botones para editar y eliminar
                 const btnEditar = document.createElement('button');
                 btnEditar.textContent = 'Editar';
-                btnEditar.addEventListener('click', () => editarRegistro(childSnapshot.key, registro.name, registro.age, registro.propiedad, registro.ubicacion, registro.precio, registro.descripcion, registro.tipo));
+                btnEditar.addEventListener('click', () => editarRegistro(childSnapshot.key, registro.propiedad, registro.ubicacion, registro.precio, registro.descripcion, registro.tipo));
 
                 const btnEliminar = document.createElement('button');
                 btnEliminar.textContent = 'Eliminar';
@@ -118,18 +114,14 @@
         });
 
         window.editarRegistro = function (key, nombre, edad) {
-            const nuevoNombre = prompt('Editar nombre:', nombre);
-            const nuevaEdad = prompt('Editar edad:', edad);
             const nuevaPropiedad = prompt('Editar propiedad:', propiedad);
             const nuevaUbicacion = prompt('Editar ubicacion:', ubicacion);
             const nuevaPrecio = prompt('Editar precio:', precio);
             const nuevaDescripcion = prompt('Editar descripcion:', descripcion);
             const nuevaTipo = prompt('Editar tipo:', tipo);
 
-            if (nuevoNombre !== null && nuevaEdad !== null && nuevaPropiedad !== null) {
+            if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevaPrecio !== null && nuevaDescripcion !== null && nuevaTipo !== null) {
                 update(ref(database, `septimo/${key}`), {
-                    name: nuevoNombre,
-                    age: nuevaEdad,
                     propiedad: nuevaPropiedad,
                     ubicacion: nuevaUbicacion,
                     precio: nuevaPrecio,
