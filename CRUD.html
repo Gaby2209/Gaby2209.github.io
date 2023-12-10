@@ -1,169 +1,153 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>CRUD de Inmobiliaria con Firebase y Bootstrap</title>
-    <!-- Agrega los estilos de Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Agrega estilos adicionales si es necesario -->
-    <style>
-        body {
-            padding: 20px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
 </head>
 <body>
-
-<div class="container">
-    <h2>CRUD de Inmobiliaria con Firebase y Bootstrap</h2>
-
-    <!-- Formulario para agregar una nueva propiedad -->
-    <form id="formulario">
-        <div class="form-group">
-            <label for="propiedad">Propiedad:</label>
-            <input type="text" class="form-control" id="propiedad" required>
-        </div>
-        <div class="form-group">
-            <label for="ubicacion">Ubicación:</label>
-            <input type="text" class="form-control" id="ubicacion" required>
-        </div>
-        <div class="form-group">
-            <label for="precio">Precio:</label>
-            <input type="number" class="form-control" id="precio" required>
-        </div>
-        <button type="button" class="btn btn-primary" onclick="agregarPropiedad()">Agregar Propiedad</button>
+    <header class="cabecera">
+        <section id="texto1" >
+            <div class="contenedor">
+                <a href="index.html" title="Pagina de inicio">
+                   <img class="logo" src="img/logo.jpg" alt="Technologia inovando en el mundo">
+                </a>
+                <nav class="Menu2">
+                    <a href="inicio.html">Incio</a>
+                    <a href="contacto.html">Contactos</a>
+                    <a href="servicios.html">Servicios</a>
+                    <a href="ubicacion.html">Ubicación</a>
+                    <a href="galeria.html">Galeria</a>                
+                </nav>
+            </div>
+        </section>
+    </header>
+    <h1>Hola Mundo</h1>
+    <form id="crud-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre">
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad">
+        <label for="propiedad">Propiedad:</label>
+        <input type="text" id="propiedad">
+        <label for="propiedad">Propiedad:</label>
+        <input type="text" id="propiedad">
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion">
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion"></textarea>
+        <label for="tipo">Tipo:</label>
+        <input type="text" id="tipo">
+        <button type="button" onclick="crearRegistro()">Crear</button>
     </form>
 
-    <hr>
+    <ul id="lista-registros"></ul>
 
-    <!-- Tabla para mostrar y manipular propiedades -->
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Propiedad</th>
-            <th>Ubicación</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody id="tabla-body">
-        <!-- Aquí se mostrarán las propiedades -->
-        </tbody>
-    </table>
-</div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBB4VLEuWx4O57s4dfu9ii0BWLWJT33x58",
+            authDomain: "proyectofari.firebaseapp.com",
+            databaseURL: "https://proyectofari-default-rtdb.firebaseio.com",
+            projectId: "proyectofari",
+            storageBucket: "proyectofari.appspot.com",
+            messagingSenderId: "538414020531",
+            appId: "1:538414020531:web:08051bd59c98626d6a3dc6"
+        };
 
-<!-- Agrega los scripts de Bootstrap, jQuery y Firebase -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Agrega la biblioteca de Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
 
-<!-- Configuración e inicialización de Firebase -->
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyBB4VLEuWx4O57s4dfu9ii0BWLWJT33x58",
-        authDomain: "proyectofari.firebaseapp.com",
-        databaseURL: "https://proyectofari-default-rtdb.firebaseio.com",
-        projectId: "proyectofari",
-        storageBucket: "proyectofari.appspot.com",
-        messagingSenderId: "538414020531",
-        appId: "1:538414020531:web:08051bd59c98626d6a3dc6"
-    };
-
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const propiedadesRef = database.ref('propiedades');
-
-    let idContador = 1;
-
-    // Leer datos de Firebase al cargar la página
-    propiedadesRef.on('value', (snapshot) => {
-        document.getElementById('tabla-body').innerHTML = '';
-        snapshot.forEach((childSnapshot) => {
-            const propiedad = childSnapshot.val();
-            agregarFila(propiedad.id, propiedad.propiedad, propiedad.ubicacion, propiedad.precio);
-            idContador = Math.max(idContador, propiedad.id + 1);
-        });
-    });
-
-    function agregarPropiedad() {
-        const propiedad = document.getElementById('propiedad').value;
-        const ubicacion = document.getElementById('ubicacion').value;
-        const precio = document.getElementById('precio').value;
-
-        if (propiedad.trim() !== '' && ubicacion.trim() !== '' && precio.trim() !== '') {
-            const nuevaPropiedad = {
-                id: idContador,
-                propiedad: propiedad,
-                ubicacion: ubicacion,
-                precio: precio
-            };
-
-            // Agregar a Firebase
-            propiedadesRef.push(nuevaPropiedad);
-
-            // Incrementar el contador de IDs
-            idContador++;
+        window.crearRegistro = function () {
+            const nombre = document.getElementById("nombre").value;
+            const edad = document.getElementById("edad").value;
+            const propiedad = document.getElementById("propiedad").value;
+            
+            push(
+                ref(database, 'septimo'),
+                {
+                    name: nombre,
+                    age: edad,
+                    priedad: propiedad,
+                    ubicacion: ubicacion,
+                    precio: precio,
+                    descripcion: descripcion,
+                    tipo: tipo
+                }
+            );
 
             // Limpiar los campos después de agregar
+            document.getElementById('nombre').value = '';
+            document.getElementById('edad').value = '';
             document.getElementById('propiedad').value = '';
             document.getElementById('ubicacion').value = '';
             document.getElementById('precio').value = '';
-        } else {
-            alert('Por favor, complete todos los campos.');
+            document.getElementById('descripcion').value = '';
+            document.getElementById('tipo').value = '';
         }
-    }
 
-    function agregarFila(id, propiedad, ubicacion, precio) {
-        const fila = `<tr id="fila-${id}">
-                        <td>${id}</td>
-                        <td>${propiedad}</td>
-                        <td>${ubicacion}</td>
-                        <td>${precio}</td>
-                        <td>
-                            <button type="button" class="btn btn-warning btn-sm" onclick="editarPropiedad(${id})">Editar</button>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarPropiedad(${id})">Eliminar</button>
-                        </td>
-                      </tr>`;
+        // Escuchar cambios en la base de datos y actualizar la lista
+        onValue(ref(database, 'septimo'), (snapshot) => {
+            const listaRegistros = document.getElementById('lista-registros');
+            listaRegistros.innerHTML = '';
 
-        document.getElementById('tabla-body').innerHTML += fila;
-    }
+            snapshot.forEach((childSnapshot) => {
+                const registro = childSnapshot.val();
+                const li = document.createElement('li');
+                li.textContent = `${registro.name}, ${registro.age} años, ${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo}`;
 
-    function editarPropiedad(id) {
-        const propiedadActual = document.getElementById(`fila-${id}`).children[1].innerText;
-        const ubicacionActual = document.getElementById(`fila-${id}`).children[2].innerText;
-        const precioActual = document.getElementById(`fila-${id}`).children[3].innerText;
+                // Botones para editar y eliminar
+                const btnEditar = document.createElement('button');
+                btnEditar.textContent = 'Editar';
+                btnEditar.addEventListener('click', () => editarRegistro(childSnapshot.key, registro.name, registro.age, registro.propiedad, registro.ubicacion, registro.precio, registro.descripcion, registro.tipo));
 
-        const nuevaPropiedad = prompt('Editar propiedad:', propiedadActual);
-        const nuevaUbicacion = prompt('Editar ubicación:', ubicacionActual);
-        const nuevoPrecio = prompt('Editar precio:', precioActual);
+                const btnEliminar = document.createElement('button');
+                btnEliminar.textContent = 'Eliminar';
+                btnEliminar.addEventListener('click', () => eliminarRegistro(childSnapshot.key));
 
-        if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevoPrecio !== null) {
-            const propiedadEditada = {
-                id: id,
-                propiedad: nuevaPropiedad,
-                ubicacion: nuevaUbicacion,
-                precio: nuevoPrecio
-            };
+                li.appendChild(btnEditar);
+                li.appendChild(btnEliminar);
 
-            // Actualizar en Firebase
-            propiedadesRef.child(id).set(propiedadEditada);
+                listaRegistros.appendChild(li);
+            });
+        });
+
+        window.editarRegistro = function (key, nombre, edad) {
+            const nuevoNombre = prompt('Editar nombre:', nombre);
+            const nuevaEdad = prompt('Editar edad:', edad);
+            const nuevaPropiedad = prompt('Editar propiedad:', propiedad);
+            const nuevaUbicacion = prompt('Editar ubicacion:', ubicacion);
+            const nuevaPrecio = prompt('Editar precio:', precio);
+            const nuevaDescripcion = prompt('Editar descripcion:', descripcion);
+            const nuevaTipo = prompt('Editar tipo:', tipo);
+
+            if (nuevoNombre !== null && nuevaEdad !== null && nuevaPropiedad !== null) {
+                update(ref(database, `septimo/${key}`), {
+                    name: nuevoNombre,
+                    age: nuevaEdad,
+                    propiedad: nuevaPropiedad,
+                    ubicacion: nuevaUbicacion,
+                    precio: nuevaPrecio,
+                    descripcion: nuevaDescripcion,
+                    tipo: nuevaTipo,
+                });
+            }
         }
-    }
 
-    function eliminarPropiedad(id) {
-        const confirmacion = confirm('¿Seguro que desea eliminar esta propiedad?');
+        window.eliminarRegistro = function (key) {
+            const confirmacion = confirm('¿Seguro que desea eliminar este registro?');
 
-        if (confirmacion) {
-            // Eliminar en Firebase
-            propiedadesRef.child(id).remove();
+            if (confirmacion) {
+                remove(ref(database, `septimo/${key}`));
+            }
         }
-    }
-</script>
-
+    </script>
 </body>
-</html
+</html>
