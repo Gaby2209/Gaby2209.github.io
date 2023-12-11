@@ -252,7 +252,7 @@
             const nuevaTipo = prompt('Editar tipo:', tipo);
 
             if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevaPrecio !== null && nuevaDescripcion !== null && nuevaTipo !== null) {
-                update(ref(database, `inmuebles_Paredes/${key}`), {
+                update(ref(database, `inmueble_Paredes/${key}`), {
                     propiedad: nuevaPropiedad,
                     ubicacion: nuevaUbicacion,
                     precio: nuevaPrecio,
