@@ -226,7 +226,7 @@
             snapshot.forEach((childSnapshot) => {
                 const registro = childSnapshot.val();
                 const li = document.createElement('li');
-                li.textContent = '${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo}';
+                li.textContent = `${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo}`;
 
                 // Botones para editar y eliminar
                 const btnEditar = document.createElement('button');
@@ -252,7 +252,7 @@
             const nuevaTipo = prompt('Editar tipo:', tipo);
 
             if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevaPrecio !== null && nuevaDescripcion !== null && nuevaTipo !== null) {
-                update(ref(database, 'inmueble_Paredes/${key}'), {
+                update(ref(database, `inmuebles_Paredes/${key}`), {
                     propiedad: nuevaPropiedad,
                     ubicacion: nuevaUbicacion,
                     precio: nuevaPrecio,
@@ -266,7 +266,7 @@
             const confirmacion = confirm('¿Seguro que desea eliminar este registro?');
 
             if (confirmacion) {
-                remove(ref(database, 'inmueble_Paredes/${key}'));
+                remove(ref(database, `inmueble_Paredes/${key}`));
             }
         }
     </script>
