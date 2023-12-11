@@ -200,7 +200,7 @@
             const tipo = document.getElementById("tipo").value;
             
             push(
-                ref(database, 'inmueblegp'),
+                ref(database, 'inmueble_Paredes'),
                 {
                     propiedad: propiedad,
                     ubicacion: ubicacion,
@@ -219,7 +219,7 @@
         }
 
         // Escuchar cambios en la base de datos y actualizar la lista
-        onValue(ref(database, 'inmueblegp'), (snapshot) => {
+        onValue(ref(database, 'inmueble_Paredes'), (snapshot) => {
             const listaRegistros = document.getElementById('lista-registros');
             listaRegistros.innerHTML = '';
 
@@ -252,7 +252,7 @@
             const nuevaTipo = prompt('Editar tipo:', tipo);
 
             if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevaPrecio !== null && nuevaDescripcion !== null && nuevaTipo !== null) {
-                update(ref(database, inmueblegp/${key}), {
+                update(ref(database, inmueble_Paredes/${key}), {
                     propiedad: nuevaPropiedad,
                     ubicacion: nuevaUbicacion,
                     precio: nuevaPrecio,
@@ -266,7 +266,7 @@
             const confirmacion = confirm('¿Seguro que desea eliminar este registro?');
 
             if (confirmacion) {
-                remove(ref(database, inmueblegp/${key}));
+                remove(ref(database, inmueble_Paredes/${key}));
             }
         }
     </script>
