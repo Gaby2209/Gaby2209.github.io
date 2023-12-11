@@ -7,22 +7,31 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #2d2d2d;
+            color: white;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         header {
-            background-color: #333;
+            background-color: #1a1a1a;
             color: white;
             padding: 10px;
             text-align: center;
+            width: 100%;
         }
 
         .contenedor {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 80%;
+            margin: 0 auto;
         }
 
         .Menu2 {
@@ -39,28 +48,32 @@
             padding: 10px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            border: 1px solid #1a1a1a;
         }
 
         .Menu2 a:hover {
             background-color: #555;
+            border: 1px solid #555;
         }
 
         h1 {
             text-align: center;
+            color: #61dafb;
         }
 
         #crud-form {
             max-width: 400px;
             margin: 20px auto;
             padding: 15px;
-            background-color: white;
+            background-color: #1a1a1a;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         label {
             display: block;
             margin-bottom: 8px;
+            color: #61dafb;
         }
 
         input,
@@ -73,9 +86,18 @@
             box-sizing: border-box;
         }
 
-        button {
+        input,
+        textarea,
+        select {
             background-color: #333;
+            border: 1px solid #555;
             color: white;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #61dafb;
+            color: #2d2d2d;
             border: none;
             padding: 10px;
             cursor: pointer;
@@ -84,7 +106,7 @@
         }
 
         button:hover {
-            background-color: #555;
+            background-color: #4fa3d1;
         }
 
         #lista-registros {
@@ -95,11 +117,11 @@
         }
 
         li {
-            background-color: white;
+            background-color: #1a1a1a;
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         li button {
@@ -124,7 +146,7 @@
             </div>
         </section>
     </header>
-    <h1>Hola Mundo</h1>
+    <h1>Registro de Inmueble</h1>
     <form id="crud-form">
         <label for="propiedad">Propiedad:</label>
         <input type="text" id="propiedad">
@@ -169,7 +191,7 @@
             const tipo = document.getElementById("tipo").value;
             
             push(
-                ref(database, 'septimo'),
+                ref(database, 'inmueblegp'),
                 {
                     propiedad: propiedad,
                     ubicacion: ubicacion,
@@ -188,7 +210,7 @@
         }
 
         // Escuchar cambios en la base de datos y actualizar la lista
-        onValue(ref(database, 'septimo'), (snapshot) => {
+        onValue(ref(database, 'inmueblegp'), (snapshot) => {
             const listaRegistros = document.getElementById('lista-registros');
             listaRegistros.innerHTML = '';
 
@@ -221,7 +243,7 @@
             const nuevaTipo = prompt('Editar tipo:', tipo);
 
             if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevaPrecio !== null && nuevaDescripcion !== null && nuevaTipo !== null) {
-                update(ref(database, `septimo/${key}`), {
+                update(ref(database, `inmueblegp/${key}`), {
                     propiedad: nuevaPropiedad,
                     ubicacion: nuevaUbicacion,
                     precio: nuevaPrecio,
@@ -235,7 +257,7 @@
             const confirmacion = confirm('¿Seguro que desea eliminar este registro?');
 
             if (confirmacion) {
-                remove(ref(database, `septimo/${key}`));
+                remove(ref(database, `inmueblegp/${key}`));
             }
         }
     </script>
