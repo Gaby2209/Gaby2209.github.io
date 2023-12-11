@@ -154,21 +154,23 @@
         </section>
     </header>
     <h1>Registro de Inmueble</h1>
-    <form id="crud-form">
-        <label for="propiedad">Propiedad:</label>
-        <input type="text" id="propiedad">
-        <label for="ubicacion">Ubicación:</label>
-        <input type="text" id="ubicacion">
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio">
-        <label for="descripcion">Descripción:</label>
-        <textarea id="descripcion"></textarea>
-        <label for="tipo">Tipo:</label>
-        <input type="text" id="tipo">
-        <button type="button" onclick="crearRegistro()">Crear</button>
-    </form>
+    <div id="content-container">
+        <form id="crud-form">
+            <label for="propiedad">Propiedad:</label>
+            <input type="text" id="propiedad">
+            <label for="ubicacion">Ubicación:</label>
+            <input type="text" id="ubicacion">
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion"></textarea>
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo">
+            <button type="button" onclick="crearRegistro()">Crear</button>
+        </form>
 
-    <ul id="lista-registros"></ul>
+        <ul id="lista-registros"></ul>
+    </div>
 
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -198,7 +200,7 @@
             const tipo = document.getElementById("tipo").value;
             
             push(
-                ref(database, 'inmueble_Paredes'),
+                ref(database, 'inmueblegp'),
                 {
                     propiedad: propiedad,
                     ubicacion: ubicacion,
@@ -217,14 +219,14 @@
         }
 
         // Escuchar cambios en la base de datos y actualizar la lista
-        onValue(ref(database, 'inmueble_Paredes'), (snapshot) => {
+        onValue(ref(database, 'inmueblegp'), (snapshot) => {
             const listaRegistros = document.getElementById('lista-registros');
             listaRegistros.innerHTML = '';
 
             snapshot.forEach((childSnapshot) => {
                 const registro = childSnapshot.val();
                 const li = document.createElement('li');
-                li.textContent = `${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo}`;
+                li.textContent = ${registro.propiedad}, ${registro.ubicacion}, ${registro.precio}, ${registro.descripcion}, ${registro.tipo};
 
                 // Botones para editar y eliminar
                 const btnEditar = document.createElement('button');
@@ -250,7 +252,7 @@
             const nuevaTipo = prompt('Editar tipo:', tipo);
 
             if (nuevaPropiedad !== null && nuevaUbicacion !== null && nuevaPrecio !== null && nuevaDescripcion !== null && nuevaTipo !== null) {
-                update(ref(database, `inmueble_Paredes/${key}`), {
+                update(ref(database, inmueblegp/${key}), {
                     propiedad: nuevaPropiedad,
                     ubicacion: nuevaUbicacion,
                     precio: nuevaPrecio,
@@ -264,7 +266,7 @@
             const confirmacion = confirm('¿Seguro que desea eliminar este registro?');
 
             if (confirmacion) {
-                remove(ref(database, `inmueble_Paredes/${key}`));
+                remove(ref(database, inmueblegp/${key}));
             }
         }
     </script>
